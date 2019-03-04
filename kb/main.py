@@ -1,4 +1,7 @@
 import time
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget
+from PyQt5.QtGui import QIcon
 
 from action_buffer import buffer_to_string, execute_buffer
 from action_set import Letters, CapitalLetters, Digits, Symbols, Controls
@@ -13,9 +16,9 @@ class Model:
 
     def print_status(self):
         print()
-        print('Action:', self.current_action_set.selected_action().name)
-        print('Buffer:', buffer_to_string())
-        print('Set:', self.current_action_set.name)
+        print('Текущее действие:', self.current_action_set.selected_action().name)
+        print('Накопленные символы:', buffer_to_string())
+        print('Подмножество действий:', self.current_action_set.name)
 
     def select_action(self):
         self.current_action_set.selected_action().select()
@@ -43,12 +46,15 @@ button_to_command = {
     'WHEELUP': model.previous_action,
     'WHEELDOWN': model.next_action
 }
+
 last_id = read_data()[0]
 model.print_status()
-while True:
-    current_id, button = read_data()
-    if current_id != last_id:
-        last_id = current_id
-        button_to_command[button]()
-        model.print_status()
-    time.sleep(0.1)
+
+
+# while True:
+#     current_id, button = read_data()
+#     if current_id != last_id:
+#         last_id = current_id
+#         button_to_command[button]()
+#         model.print_status()
+#     time.sleep(0.1)

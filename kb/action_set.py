@@ -28,7 +28,7 @@ class ActionSet:
 
 class Letters(ActionSet):
     def __init__(self):
-        super().__init__('Letters', [
+        super().__init__('Буквы', [
             Click('a', uinput.KEY_A),
             Click('b', uinput.KEY_B),
             Click('c', uinput.KEY_C),
@@ -60,7 +60,7 @@ class Letters(ActionSet):
 
 class CapitalLetters(ActionSet):
     def __init__(self):
-        super().__init__('Capital Letters', [
+        super().__init__('Большие буквы', [
             Shift('A', uinput.KEY_A),
             Shift('B', uinput.KEY_B),
             Shift('C', uinput.KEY_C),
@@ -92,7 +92,7 @@ class CapitalLetters(ActionSet):
 
 class Digits(ActionSet):
     def __init__(self):
-        super().__init__('Digits', [
+        super().__init__('Цифры', [
             Click('0', uinput.KEY_0),
             Click('1', uinput.KEY_1),
             Click('2', uinput.KEY_2),
@@ -108,7 +108,7 @@ class Digits(ActionSet):
 
 class Symbols(ActionSet):
     def __init__(self):
-        super().__init__('Symbols', [
+        super().__init__('Символы', [
             Click(',', uinput.KEY_COMMA),
             Click('.', uinput.KEY_DOT),
             Click(';', uinput.KEY_SEMICOLON),
@@ -146,7 +146,7 @@ class Symbols(ActionSet):
 
 class Controls(ActionSet):
     def __init__(self):
-        super().__init__('Controls', [
+        super().__init__('Клавиши управления', [
             Click('[Space]', uinput.KEY_SPACE),
             Click('[Tab]', uinput.KEY_TAB),
             Click('[Enter]', uinput.KEY_ENTER),

@@ -7,6 +7,7 @@ def add_action(action):
 
 def execute_buffer():
     for action in actions:
+        print(action)
         action.execute()
     actions.clear()
 
