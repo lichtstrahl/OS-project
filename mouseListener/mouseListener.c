@@ -50,6 +50,14 @@ static MouseButton dataToButton(signed char *data)
     {
         return WHEELDOWN;
     }
+    if (data[0] == 8)
+    {
+        return SIDE_BUTTON_1;
+    }
+    if (data[0] == 16)
+    {
+        return SIDE_BUTTON_2;
+    }
     return NONE;
 }
 
@@ -67,6 +75,10 @@ static char *buttonToString(void)
             return "WHEELUP";
         case WHEELDOWN:
             return "WHEELDOWN";
+        case SIDE_BUTTON_1:
+            return "SIDE_1";
+        case SIDE_BUTTON_2:
+            return "SIDE_2";
         default:
             return "NONE";
     }

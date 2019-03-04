@@ -41,7 +41,13 @@ public:
     }
 
     void print() {
-        printf("Текущее множество: %s;\n", availableSet[currentSet].name.c_str());
+        for (int i = 0; i < COUNT_AVAILABLE_SET; i++) {
+            char c1 = (i==currentSet) ? '[' : ' ';
+            char c2 = (i == currentSet) ? ']' : ' ';
+            printf("%c%s%c", c1, availableSet[i].name.c_str(), c2);
+        }
+        printf("\n");
+
         printf("Текущий элемент: %s;\n", getCurrentElement().c_str());
         printf("Буффер: %s;\n", buffer.size() != 0 ? buffer_to_str() : MSG_NEXT_CLICK_EXIT);
     }
@@ -151,7 +157,7 @@ int main(int argc, char **argv) {
 
     while (true) {
         Action newAction = fileHolder.readFile();
-        if (newAction.id != oldAction.id) {
+        if (newAction.type != ActionType::NONE && newAction.id != oldAction.id) {
             system("clear");
             SEND_MSG(VERSION);
             bool exit = model.processingAction(newAction);
@@ -164,7 +170,7 @@ int main(int argc, char **argv) {
             }
         }
 
-        PAUSE_MS(200);
+        PAUSE_MS(250);
     }
 
 
