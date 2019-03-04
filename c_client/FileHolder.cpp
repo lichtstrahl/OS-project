@@ -36,6 +36,10 @@ Action FileHolder::readFile() {
             type = ActionType::SCROLL_UP;
         if (!strcmp(line.c_str(), ATYPE_DOWN))
             type = ActionType::SCROLL_DOWN;
+        if (!strcmp(line.c_str(), ATYPE_SIDE_1))
+            type = ActionType::SIDE_1;
+        if (!strcmp(line.c_str(), ATYPE_SIDE_2))
+            type = ActionType::SIDE_2;
 
         Action action = {id, type, line.c_str()};
         file.close();

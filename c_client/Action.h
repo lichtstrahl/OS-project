@@ -10,6 +10,8 @@
 #define ATYPE_MIDDLE    "MIDDLE"
 #define ATYPE_UP        "WHEELUP"
 #define ATYPE_DOWN      "WHEELDOWN"
+#define ATYPE_SIDE_1    "SIDE_1"
+#define ATYPE_SIDE_2    "SIDE_2"
 
 enum ActionType {
     CLICK_LEFT,
@@ -17,6 +19,8 @@ enum ActionType {
     CLICK_MIDDLE,
     SCROLL_UP,
     SCROLL_DOWN,
+    SIDE_1,
+    SIDE_2,
     NONE
 };
 

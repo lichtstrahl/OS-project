@@ -61,7 +61,14 @@ public:
                 processingClickLeft();
                 break;
             case CLICK_RIGHT:
-                nextSet();
+                break;
+
+            case SIDE_1:
+                forwardSet();
+                break;
+
+            case SIDE_2:
+                backSet();
                 break;
 
             case CLICK_MIDDLE: {
@@ -111,9 +118,16 @@ public:
         }
     }
 
-    void nextSet() {
+    void forwardSet() {
         if (++currentSet == COUNT_AVAILABLE_SET) {
             currentSet = 0;
+        }
+        currentIndex = 0;
+    }
+
+    void backSet() {
+        if (--currentSet < 0) {
+            currentSet = COUNT_AVAILABLE_SET-1;
         }
         currentIndex = 0;
     }
