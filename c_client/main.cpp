@@ -81,7 +81,6 @@ public:
             case CLICK_RIGHT:{
                 unsigned long n = buffer.size();
                 system(buffer_to_str());
-                buffer.clear();
                 return n == 0;
             }
 
@@ -94,6 +93,7 @@ public:
                 break;
 
             case CLICK_MIDDLE:
+                buffer.clear();
                 break;
 
 
