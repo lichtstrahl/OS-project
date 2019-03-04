@@ -1,0 +1,1 @@
+cmd_/home/igor/OS/mouse_terminal/usbmouse/usbmouse.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/igor/OS/mouse_terminal/usbmouse/usbmouse.ko /home/igor/OS/mouse_terminal/usbmouse/usbmouse.o /home/igor/OS/mouse_terminal/usbmouse/usbmouse.mod.o ;  true

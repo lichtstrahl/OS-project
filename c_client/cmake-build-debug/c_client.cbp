@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="c_client"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/igor/OS/mouse_terminal/c_client/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/igor/OS/mouse_terminal/c_client/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="c_client">
+				<Option output="/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/c_client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/igor/OS/mouse_terminal/c_client/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 c_client"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="c_client/fast">
+				<Option output="/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/c_client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/igor/OS/mouse_terminal/c_client/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 c_client/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/igor/OS/mouse_terminal/c_client/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/igor/OS/mouse_terminal/c_client/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/igor/OS/mouse_terminal/c_client/Action.h">
+			<Option target="c_client"/>
+		</Unit>
+		<Unit filename="/home/igor/OS/mouse_terminal/c_client/FileHolder.cpp">
+			<Option target="c_client"/>
+		</Unit>
+		<Unit filename="/home/igor/OS/mouse_terminal/c_client/FileHolder.h">
+			<Option target="c_client"/>
+		</Unit>
+		<Unit filename="/home/igor/OS/mouse_terminal/c_client/color.h">
+			<Option target="c_client"/>
+		</Unit>
+		<Unit filename="/home/igor/OS/mouse_terminal/c_client/const.h">
+			<Option target="c_client"/>
+		</Unit>
+		<Unit filename="/home/igor/OS/mouse_terminal/c_client/main.cpp">
+			<Option target="c_client"/>
+		</Unit>
+		<Unit filename="/home/igor/OS/mouse_terminal/c_client/timer.h">
+			<Option target="c_client"/>
+		</Unit>
+		<Unit filename="/home/igor/OS/mouse_terminal/c_client/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

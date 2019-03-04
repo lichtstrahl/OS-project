@@ -1,0 +1,1 @@
+cmd_/home/igor/OS/mouse_terminal/mouseListener/mouseListener.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/igor/OS/mouse_terminal/mouseListener/mouseListener.ko /home/igor/OS/mouse_terminal/mouseListener/mouseListener.o /home/igor/OS/mouse_terminal/mouseListener/mouseListener.mod.o ;  true
