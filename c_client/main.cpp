@@ -4,6 +4,7 @@
 #include "FileHolder.h"
 #include <fstream>
 #include "const.h"
+#include "color.h"
 #include <vector>
 #include <string>
 #include <string.h>
@@ -44,11 +45,22 @@ public:
         for (int i = 0; i < COUNT_AVAILABLE_SET; i++) {
             char c1 = (i==currentSet) ? '[' : ' ';
             char c2 = (i == currentSet) ? ']' : ' ';
-            printf("%c%s%c", c1, availableSet[i].name.c_str(), c2);
+            const char* color = (i == currentSet) ? COLOR_CYAN : COLOR_DEFAULT;
+            printf("%c%s%s%s%c", c1, color, availableSet[i].name.c_str(), COLOR_DEFAULT, c2);
         }
         printf("\n");
 
-        printf("Текущий элемент: %s;\n", getCurrentElement().c_str());
+
+        Set set = getCurrentSet();
+        for (int i = 0; i < set.length; i++) {
+            char c1 = (i== currentIndex) ? '[' : ' ';
+            char c2 = (i == currentIndex) ? ']' : ' ';
+            const char *color = (i == currentIndex) ? COLOR_GREEN : COLOR_DEFAULT;
+            printf("%c%s%s%s%c", c1, color, set.set[i].c_str(), COLOR_DEFAULT, c2);
+        }
+        printf("\n");
+
+
         printf("Буффер: %s;\n", buffer.size() != 0 ? buffer_to_str() : MSG_NEXT_CLICK_EXIT);
     }
 
@@ -66,8 +78,12 @@ public:
             case CLICK_LEFT:
                 processingClickLeft();
                 break;
-            case CLICK_RIGHT:
-                break;
+            case CLICK_RIGHT:{
+                unsigned long n = buffer.size();
+                system(buffer_to_str());
+                buffer.clear();
+                return n == 0;
+            }
 
             case SIDE_1:
                 forwardSet();
@@ -77,12 +93,8 @@ public:
                 backSet();
                 break;
 
-            case CLICK_MIDDLE: {
-                unsigned long n = buffer.size();
-                system(buffer_to_str());
-                buffer.clear();
-                return n == 0;
-            }
+            case CLICK_MIDDLE:
+                break;
 
 
             case SCROLL_UP:
@@ -148,17 +160,23 @@ public:
 
 };
 
-int main(int argc, char **argv) {
+#define CLEAR system("clear")
 
+int main(int argc, char **argv) {
+    CLEAR;
     FileHolder fileHolder(DATA_PATH);
     Action oldAction = {-1, CLICK_LEFT, nullptr};
     Model model;
     vector<Action> bufferAction;
 
+
+    SEND_MSG(VERSION);
+    model.print();
+
     while (true) {
         Action newAction = fileHolder.readFile();
         if (newAction.type != ActionType::NONE && newAction.id != oldAction.id) {
-            system("clear");
+            CLEAR;
             SEND_MSG(VERSION);
             bool exit = model.processingAction(newAction);
             bufferAction.push_back(newAction);

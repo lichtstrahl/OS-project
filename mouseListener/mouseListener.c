@@ -29,33 +29,40 @@ static MouseButton dataToButton(signed char *data)
 {
     char msg[512];
     sprintf(msg, "%d %d %d %d %d %d %d %d", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
-    printk(KERN_INFO "dataToButton: %s", msg);
-    if (data[0] & 0x01)
+
+    if (data[0] & 0x01 && !data[2] && !data[3] && !data[4] && !data[5])
     {
+        printk(KERN_INFO "dataToButton: %s", msg);
         return LEFT;
     }
-    if (data[0] & 0x02)
+    if (data[0] & 0x02 && !data[2] && !data[3] && !data[4] && !data[5])
     {
+        printk(KERN_INFO "dataToButton: %s", msg);
         return RIGHT;
     }
-    if (data[0] & 0x04)
+    if (data[0] & 0x04 && !data[2] && !data[3] && !data[4] && !data[5])
     {
+        printk(KERN_INFO "dataToButton: %s", msg);
         return MIDDLE;
     }
     if (data[6] == 1)
     {
+        printk(KERN_INFO "dataToButton: %s", msg);
         return WHEELUP;
     }
     if (data[6] == -1)
     {
+        printk(KERN_INFO "dataToButton: %s", msg);
         return WHEELDOWN;
     }
-    if (data[0] == 8)
+    if (data[0] == 8 && !data[2] && !data[3] && !data[4] && !data[5])
     {
+        printk(KERN_INFO "dataToButton: %s", msg);
         return SIDE_BUTTON_1;
     }
-    if (data[0] == 16)
+    if (data[0] == 16 && !data[2] && !data[3] && !data[4] && !data[5])
     {
+        printk(KERN_INFO "dataToButton: %s", msg);
         return SIDE_BUTTON_2;
     }
     return NONE;

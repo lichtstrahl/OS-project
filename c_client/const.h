@@ -12,7 +12,7 @@
 #include <stdio.h>
 #define SEND_MSG(msg) printf(msg "\n")
 #define MSG_FILE_INFO_NOT_FOUND "Не удалось найти файл модуля. Вероятно он не был загружен или был отключен."
-#define MSG_NEXT_CLICK_EXIT     "(Нажать на СКМ, чтобы выйти)"
+#define MSG_NEXT_CLICK_EXIT     "(Нажать на ПКМ, чтобы выйти)"
 
 #define SET_LOW_LETTERS "Маленькие буквы"
 #define SET_BIG_LETTERS "Большие буквы"
