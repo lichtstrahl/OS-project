@@ -15,7 +15,7 @@ using std::string;
 
 #define MAX_COUNT "10"
 #define DATA_PATH "/proc/mouseListener/info"
-#define VERSION "v.2.1.0 Добавлены специальные символы [Space] [Backspace]"
+#define VERSION "v.2.2.0 Добавлены специальные символы [Space] [Backspace]"
 
 
 #define MSG_MAX_CONT_ACTION "Всего будет обработано " MAX_COUNT " действий"
@@ -161,8 +161,17 @@ public:
 };
 
 #define CLEAR system("clear")
+#define RMMOD_USBHID    "sudo rmmod usbhid"
+#define INSMOD_LISTENER "sudo insmod mouseListener/mouseListener.ko"
+#define INSMOD_USBMOUSE "sudo insmod usbmouse/usbmouse.ko"
+#define RMMOD_USBMOUSE  "sudo rmmod usbmouse"
+#define RMMOD_LISTENER  "sudo rmmod mouseListener"
+#define PROBE_USBHID    "sudo modprobe usbhid"
 
 int main(int argc, char **argv) {
+    system(RMMOD_USBHID);
+    system(INSMOD_LISTENER);
+    system(INSMOD_USBMOUSE);
     CLEAR;
     FileHolder fileHolder(DATA_PATH);
     Action oldAction = {-1, CLICK_LEFT, nullptr};
@@ -192,6 +201,8 @@ int main(int argc, char **argv) {
     }
 
 
-    system("bash ./stop.sh");
+    system(RMMOD_USBMOUSE);
+    system(RMMOD_LISTENER);
+    system(PROBE_USBHID);
     return 0;
 }
