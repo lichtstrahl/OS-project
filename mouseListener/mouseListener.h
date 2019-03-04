@@ -40,7 +40,9 @@ typedef enum mouseButton
     RIGHT,
     MIDDLE,
     WHEELUP,
-    WHEELDOWN
+    WHEELDOWN,
+    SIDE_BUTTON_1,
+    SIDE_BUTTON_2,
 } MouseButton;
 
 MouseButton button;
