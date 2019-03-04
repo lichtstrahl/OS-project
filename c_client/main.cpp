@@ -22,22 +22,22 @@ class Model
 {
 private:
     int currentIndex;
-    const Set *currentSet;
+    int currentSet;
     vector<char> buffer;
 
-    char currentElement() {
-        return currentSet->set[currentIndex];
+    char getCurrentElement() {
+        return availableSet[currentSet].set[currentIndex];
     }
 public:
     Model()
     {
         this->currentIndex = 0;
-        this->currentSet = &low_letters;
+        this->currentSet = 0;
     }
 
     void print() {
-        printf("Текущее множество: %s;\n", currentSet->name.c_str());
-        printf("Текущий элемент: %c;\n", currentElement());
+        printf("Текущее множество: %s;\n", availableSet[currentSet].name.c_str());
+        printf("Текущий элемент: %c;\n", getCurrentElement());
         printf("Буффер: %s;\n", buffer_to_str());
     }
 
@@ -50,19 +50,21 @@ public:
         return buf;
     }
 
-    void processingAction(Action a) {
+    bool processingAction(Action a) {
         switch (a.type) {
             case CLICK_LEFT:
-                buffer.push_back(currentElement());
+                buffer.push_back(getCurrentElement());
                 break;
             case CLICK_RIGHT:
 
                 break;
 
-            case CLICK_MIDDLE:
+            case CLICK_MIDDLE: {
+                unsigned long n = buffer.size();
                 system(buffer_to_str());
                 buffer.clear();
-                break;
+                return n == 0;
+            }
 
 
             case SCROLL_UP:
@@ -76,14 +78,16 @@ public:
                 break;
         }
 
+        return false;
+
     }
 
     void forwardElement() {
-        if (++currentIndex == currentSet->length) currentIndex = 0;
+        if (++currentIndex == availableSet[currentSet].length) currentIndex = 0;
     }
 
     void backElement() {
-        if (--currentIndex < 0) currentIndex = currentSet->length-1;
+        if (--currentIndex < 0) currentIndex = availableSet[currentSet].length-1;
     }
 
 };
@@ -101,15 +105,12 @@ int main(int argc, char **argv) {
         if (newAction.id != oldAction.id) {
 //            system("clear");
             PRINT_ACTION(newAction);
-            model.processingAction(newAction);
+            bool exit = model.processingAction(newAction);
             bufferAction.push_back(newAction);
             model.print();
             oldAction = newAction;
 
-            unsigned long n = bufferAction.size();
-            if (n > 2
-                && bufferAction[n-1].type == ActionType::CLICK_MIDDLE
-                && bufferAction[n-2].type == ActionType::CLICK_MIDDLE) {
+            if (exit) {
                 break;
             }
         }

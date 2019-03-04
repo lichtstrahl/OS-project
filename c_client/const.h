@@ -44,4 +44,9 @@ const Set big_letters = {
         26
 };
 
+#define COUNT_AVAILABLE_SET 2
+const Set availableSet[COUNT_AVAILABLE_SET] = {
+        low_letters, big_letters
+};
+
 #endif //C_CLIENT_CONST_H
