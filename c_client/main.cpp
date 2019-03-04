@@ -4,8 +4,10 @@
 #include "FileHolder.h"
 #include <fstream>
 #include "const.h"
+#include <vector>
 
 using std::ifstream;
+using std::vector;
 
 
 #define MAX_COUNT "10"
@@ -19,49 +21,69 @@ using std::ifstream;
 class Model
 {
 private:
-    int currentElement;
+    int currentIndex;
     const Set *currentSet;
+    vector<char> buffer;
+
+    char currentElement() {
+        return currentSet->set[currentIndex];
+    }
 public:
     Model()
     {
-        this->currentElement = 0;
+        this->currentIndex = 0;
         this->currentSet = &low_letters;
     }
 
     void print() {
         printf("Текущее множество: %s;\n", currentSet->name.c_str());
-        printf("Текущий индекс: %d;\n", currentElement);
-        printf("Текущий элемент: %d;\n", currentSet->set[currentElement]);
+        printf("Текущий элемент: %c;\n", currentElement());
+        printf("Буффер: %s;\n", buffer_to_str());
     }
 
-    bool processingAction(Action a) {
+    char* buffer_to_str() {
+        static char buf[1024];
+        int i;
+        for (i = 0; i < buffer.size(); i++)
+            buf[i] = buffer[i];
+        buf[i] = '\0';
+        return buf;
+    }
+
+    void processingAction(Action a) {
         switch (a.type) {
             case CLICK_LEFT:
+                buffer.push_back(currentElement());
                 break;
             case CLICK_RIGHT:
+
                 break;
 
             case CLICK_MIDDLE:
-                return true;
+                system(buffer_to_str());
+                buffer.clear();
+                break;
 
 
             case SCROLL_UP:
-                backElement();
+                forwardElement();
                 break;
 
             case SCROLL_DOWN:
-                forwardElement();
+                backElement();
+                break;
+            default:
                 break;
         }
-        return false;
+
     }
 
     void forwardElement() {
-        if (++currentElement == currentSet->length) currentElement = 0;
+        if (++currentIndex == currentSet->length) currentIndex = 0;
     }
 
     void backElement() {
-        if (--currentElement < 0) currentElement = currentSet->length-1;
+        if (--currentIndex < 0) currentIndex = currentSet->length-1;
     }
 
 };
@@ -72,16 +94,22 @@ int main(int argc, char **argv) {
     FileHolder fileHolder(DATA_PATH);
     Action oldAction = {-1, CLICK_LEFT, nullptr};
     Model model;
+    vector<Action> bufferAction;
 
     while (true) {
         Action newAction = fileHolder.readFile();
         if (newAction.id != oldAction.id) {
+//            system("clear");
             PRINT_ACTION(newAction);
-            bool exit = model.processingAction(newAction);
+            model.processingAction(newAction);
+            bufferAction.push_back(newAction);
             model.print();
             oldAction = newAction;
 
-            if (exit) {
+            unsigned long n = bufferAction.size();
+            if (n > 2
+                && bufferAction[n-1].type == ActionType::CLICK_MIDDLE
+                && bufferAction[n-2].type == ActionType::CLICK_MIDDLE) {
                 break;
             }
         }
