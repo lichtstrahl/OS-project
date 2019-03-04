@@ -1,0 +1,7 @@
+cd mouseListener
+make
+cd ../usbmouse
+make
+cd ..
+"/home/igor/Programm File/CLion/clion-2018.3.4/bin/cmake/linux/bin/cmake" --build ./c_client/cmake-build-debug --target c_client -- -j 2
+./c_client/cmake-build-debug/c_client
