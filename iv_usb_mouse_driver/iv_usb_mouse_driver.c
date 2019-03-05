@@ -120,7 +120,7 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
 
         // Выделение памяти под буфер. Рекомендуется использовать для USB-устройств
         // Необходим для того, чтобы не накапливались копии одних и тех же данных
-        // В общем обычный kmalloc, но с использованием DMA - прямого доступа к памяти без участия процессора
+        // В общем обычный kmalloc, но с использованием DMA - прямого доступа к памяти
         // Передается устройство, размер буффера, способ выделения и адрес DMA буфера
         mouse->data = usb_alloc_coherent(dev, 8, GFP_ATOMIC, &mouse->data_dma);
         if (!mouse->data) {
@@ -129,7 +129,8 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
             return error;
         }
         
-        // Выделяется мето под URB, GFP_KERNEL значит, что выделение происходит от имени процесса
+        // Выделяется мето под URB, GFP_KERNEL значит, 
+        // что выделение происходит от имени процесса
         // 0 - число изохронных пакетов
         mouse->irq = usb_alloc_urb(0, GFP_KERNEL);
         if (!mouse->irq) {
@@ -160,12 +161,14 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
 
         usb_make_path(dev, mouse->phys, sizeof(mouse->phys));
         strlcat(mouse->phys, "/input0", sizeof(mouse->phys));
-
+        
         input_dev->name = mouse->name;
         input_dev->phys = mouse->phys;
         usb_to_input_id(dev, &input_dev->id);
         input_dev->dev.parent = &intf->dev;
 
+        // С помощью битовых масок происходит привязка кнопок мыши
+        // Учитываются дополнительные клавиши
         input_dev->evbit[0] = BIT_MASK(EV_KEY) | BIT_MASK(EV_REL);
         input_dev->keybit[BIT_WORD(BTN_MOUSE)] = BIT_MASK(BTN_LEFT) |
                 BIT_MASK(BTN_RIGHT) | BIT_MASK(BTN_MIDDLE);
@@ -175,7 +178,8 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
         input_dev->relbit[0] |= BIT_MASK(REL_WHEEL);
 
         input_set_drvdata(input_dev, mouse);
-
+        
+        // Функции, вызываемые при подключении и отключении устройства
         input_dev->open = usb_mouse_open;
         input_dev->close = usb_mouse_close;
         
@@ -194,7 +198,8 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
                          usb_mouse_irq, mouse, endpoint->bInterval);
         mouse->irq->transfer_dma = mouse->data_dma;
         mouse->irq->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-
+        
+        // Регистрация нового устройства ввода
         error = input_register_device(mouse->dev);
         if (!error) {
             usb_set_intfdata(intf, mouse);
