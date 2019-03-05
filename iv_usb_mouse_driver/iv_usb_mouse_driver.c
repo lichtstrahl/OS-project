@@ -50,6 +50,9 @@ static void usb_mouse_irq(struct urb *urb)
                     return;
         }
 
+        // Драйвер обработал URB и готов отправить его в ядро, чтобы оно переправило его устройству
+        // Указывается блок и способ выделения памяти
+        // Поскольку данный код выполняется вне контекста процесса (это прерывание), то устанавливается соответствующий флаг
         status = usb_submit_urb (urb, GFP_ATOMIC);
         if (status)
                 dev_err(&mouse->usbdev->dev,
@@ -97,10 +100,17 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
        
         // Создаётся входная конечная точка прерывания для указанного устройства, с указанным номером.
         // В Дальнейшем она будет использоваться для инициализации URB
+        // Данная точка работает на приём, так как мы лишь принимаем сигналы от устройства
         pipe = usb_rcvintpipe(dev, endpoint->bEndpointAddress);
+        
+        
+        // узнаём максимальный размер пакета. Буфера.
+        // usb_pipeout с помощью конкретных битов в pipe определяют, являеется он in/out
         maxp = usb_maxpacket(dev, pipe, usb_pipeout(pipe));
-
+        
+        // Выделение памяти под mouse
         mouse = kzalloc(sizeof(struct usb_mouse), GFP_KERNEL);
+        // Выделение памяти для нового устройства ввода
         input_dev = input_allocate_device();
         if (!mouse || !input_dev) {
             input_free_device(input_dev);
@@ -108,7 +118,10 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
             return error;
         }
 
-
+        // Выделение памяти под буфер. Рекомендуется использовать для USB-устройств
+        // Необходим для того, чтобы не накапливались копии одних и тех же данных
+        // В общем обычный kmalloc, но с использованием DMA - прямого доступа к памяти без участия процессора
+        // Передается устройство, размер буффера, способ выделения и адрес DMA буфера
         mouse->data = usb_alloc_coherent(dev, 8, GFP_ATOMIC, &mouse->data_dma);
         if (!mouse->data) {
             input_free_device(input_dev);
