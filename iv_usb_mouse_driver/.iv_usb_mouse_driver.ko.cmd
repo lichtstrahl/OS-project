@@ -1,0 +1,1 @@
+cmd_/home/igor/OS/mouse_terminal/iv_usb_mouse_driver/iv_usb_mouse_driver.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/igor/OS/mouse_terminal/iv_usb_mouse_driver/iv_usb_mouse_driver.ko /home/igor/OS/mouse_terminal/iv_usb_mouse_driver/iv_usb_mouse_driver.o /home/igor/OS/mouse_terminal/iv_usb_mouse_driver/iv_usb_mouse_driver.mod.o ;  true

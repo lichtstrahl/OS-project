@@ -1,4 +1,4 @@
-obj-m += usbmouse.o
+obj-m += iv_usb_mouse_driver.o
 
 KBUILD_EXTRA_SYMBOLS := Module.symvers
 

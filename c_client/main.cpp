@@ -163,8 +163,8 @@ public:
 #define CLEAR system("clear")
 #define RMMOD_USBHID    "sudo rmmod usbhid"
 #define INSMOD_LISTENER "sudo insmod mouseListener/mouseListener.ko"
-#define INSMOD_USBMOUSE "sudo insmod usbmouse/usbmouse.ko"
-#define RMMOD_USBMOUSE  "sudo rmmod usbmouse"
+#define INSMOD_USBMOUSE "sudo insmod iv_usb_mouse_driver/iv_usb_mouse_driver.ko"
+#define RMMOD_USBMOUSE  "sudo rmmod iv_usb_mouse_driver"
 #define RMMOD_LISTENER  "sudo rmmod mouseListener"
 #define PROBE_USBHID    "sudo modprobe usbhid"
 

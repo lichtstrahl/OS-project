@@ -1,29 +1,3 @@
-/*
- *  Copyright (c) 1999-2001 Vojtech Pavlik
- *
- *  USB HIDBP Mouse support
- */
-
-/*
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Should you need to contact me, the author, you can do so either by
- * e-mail - mail your message to <vojtech@ucw.cz>, or by paper mail:
- * Vojtech Pavlik, Simunkova 1594, Prague 8, 182 00 Czech Republic
- */
-
 #include <linux/kernel.h>
 #include <linux/slab.h>
 #include <linux/module.h>
@@ -37,7 +11,7 @@
  * Version Information
  */
 #define DRIVER_VERSION "v1.6"
-#define DRIVER_AUTHOR "Vojtech Pavlik <vojtech@ucw.cz>"
+#define DRIVER_AUTHOR "Igor Smirnov"
 #define DRIVER_DESC "USB HID Boot Protocol mouse driver"
 #define DRIVER_LICENSE "GPL"
 
@@ -51,7 +25,6 @@ struct usb_mouse {
         struct usb_device *usbdev;
         struct input_dev *dev;
         struct urb *irq;
-
         signed char *data;
         dma_addr_t data_dma;
 };
@@ -64,47 +37,19 @@ static void usb_mouse_irq(struct urb *urb)
         int status;
 
         switch (urb->status) {
-        case 0:                 /* success */
-                break;
-        case -ECONNRESET:       /* unlink */
-        case -ENOENT:
-        case -ESHUTDOWN:
-                return;
-        /* -EPIPE:  should clear the halt */
-        default:                /* error */
-                goto resubmit;
+            case 0:   {              /* success */
+                    if(mouseListenerSendCoordinates(data) == 0)
+                        printk(KERN_INFO "My USB module:   Can't send data");
+
+                    input_sync(dev);
+                    break;
+                }
+            case -ECONNRESET:       /* unlink */
+            case -ENOENT:
+            case -ESHUTDOWN:
+                    return;
         }
 
-        if(mouseListenerSendCoordinates(data) == 0)
-            printk(KERN_INFO "My USB module:   Can't send data");
-
-/*
-        printk(KERN_CRIT "\n");
-        int i = 0;
-        for (; i < sizeof(data); i++)
-        {
-                printk(KERN_CRIT "data[%d]: %d", i, data[i]);
-        }
-*/
-/*
-        input_report_key(dev, BTN_LEFT,   data[0] & 0x01);
-        input_report_key(dev, BTN_RIGHT,  data[0] & 0x02);
-        input_report_key(dev, BTN_MIDDLE, data[0] & 0x04);
-        input_report_rel(dev, REL_WHEEL, data[6]);
-*/
-/*
-        input_report_key(dev, BTN_LEFT,   data[0] & 0x01);
-        input_report_key(dev, BTN_RIGHT,  data[0] & 0x02);
-        input_report_key(dev, BTN_MIDDLE, data[0] & 0x04);
-        input_report_key(dev, BTN_SIDE,   data[0] & 0x08);
-        input_report_key(dev, BTN_EXTRA,  data[0] & 0x10);
-
-        input_report_rel(dev, REL_X,     data[1]);
-        input_report_rel(dev, REL_Y,     data[2]);
-        input_report_rel(dev, REL_WHEEL, data[3]);
-*/
-        input_sync(dev);
-resubmit:
         status = usb_submit_urb (urb, GFP_ATOMIC);
         if (status)
                 dev_err(&mouse->usbdev->dev,
@@ -116,11 +61,9 @@ resubmit:
 static int usb_mouse_open(struct input_dev *dev)
 {
         struct usb_mouse *mouse = input_get_drvdata(dev);
-
         mouse->irq->dev = mouse->usbdev;
         if (usb_submit_urb(mouse->irq, GFP_KERNEL))
                 return -EIO;
-
         return 0;
 }
 
@@ -155,16 +98,28 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
 
         mouse = kzalloc(sizeof(struct usb_mouse), GFP_KERNEL);
         input_dev = input_allocate_device();
-        if (!mouse || !input_dev)
-                goto fail1;
+        if (!mouse || !input_dev) {
+            input_free_device(input_dev);
+            kfree(mouse);
+            return error;
+        }
+
 
         mouse->data = usb_alloc_coherent(dev, 8, GFP_ATOMIC, &mouse->data_dma);
-        if (!mouse->data)
-                goto fail1;
+        if (!mouse->data) {
+            input_free_device(input_dev);
+            kfree(mouse);
+            return error;
+        }
 
         mouse->irq = usb_alloc_urb(0, GFP_KERNEL);
-        if (!mouse->irq)
-                goto fail2;
+        if (!mouse->irq) {
+            usb_free_coherent(dev, 8, mouse->data, mouse->data_dma);
+
+            input_free_device(input_dev);
+            kfree(mouse);
+            return error;
+        }
 
         mouse->usbdev = dev;
         mouse->dev = input_dev;
@@ -212,17 +167,15 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
         mouse->irq->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
 
         error = input_register_device(mouse->dev);
-        if (error)
-                goto fail3;
+        if (!error) {
+            usb_set_intfdata(intf, mouse);
+            return 0;
+        }
 
-        usb_set_intfdata(intf, mouse);
-        return 0;
-
-fail3:
         usb_free_urb(mouse->irq);
-fail2:
+
         usb_free_coherent(dev, 8, mouse->data, mouse->data_dma);
-fail1:
+
         input_free_device(input_dev);
         kfree(mouse);
         return error;
@@ -251,7 +204,7 @@ static struct usb_device_id usb_mouse_id_table [] = {
 MODULE_DEVICE_TABLE (usb, usb_mouse_id_table);
 
 static struct usb_driver usb_mouse_driver = {
-        .name           = "usbmouse",
+        .name           = "iv_usb_mouse_driver",
         .probe          = usb_mouse_probe,
         .disconnect     = usb_mouse_disconnect,
         .id_table       = usb_mouse_id_table,
