@@ -92,7 +92,9 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
         endpoint = &interface->endpoint[0].desc;
         if (!usb_endpoint_is_int_in(endpoint))
                 return -ENODEV;
-
+       
+        // Создаётся входная конечная точка прерывания для указанного устройства, с указанным номером.
+        // В Дальнейшем она будет использоваться для инициализации URB
         pipe = usb_rcvintpipe(dev, endpoint->bEndpointAddress);
         maxp = usb_maxpacket(dev, pipe, usb_pipeout(pipe));
 
