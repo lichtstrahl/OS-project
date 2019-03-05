@@ -111,7 +111,9 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
             kfree(mouse);
             return error;
         }
-
+        
+        // Выделяется мето под URB, GFP_KERNEL значит, что выделение происходит от имени процесса
+        // 0 - число изохронных пакетов
         mouse->irq = usb_alloc_urb(0, GFP_KERNEL);
         if (!mouse->irq) {
             usb_free_coherent(dev, 8, mouse->data, mouse->data_dma);
@@ -201,6 +203,7 @@ static struct usb_device_id usb_mouse_id_table [] = {
         { }     /* Terminating entry */
 };
 
+// Макрос для создания карт. Нужен, чтобы драйвер автоматически загружался, если подключается подходящее устройство
 MODULE_DEVICE_TABLE (usb, usb_mouse_id_table);
 
 static struct usb_driver usb_mouse_driver = {
@@ -210,4 +213,5 @@ static struct usb_driver usb_mouse_driver = {
         .id_table       = usb_mouse_id_table,
 };
 
+// Стандартный макрос, чтобы не писать init/exit функции самостоятельно
 module_usb_driver(usb_mouse_driver);
