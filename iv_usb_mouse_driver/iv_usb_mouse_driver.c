@@ -174,6 +174,7 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
             return 0;
         }
 
+        // Освобождение памяти под URB. В случае какой-то ошибки
         usb_free_urb(mouse->irq);
 
         usb_free_coherent(dev, 8, mouse->data, mouse->data_dma);
