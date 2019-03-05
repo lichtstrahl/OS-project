@@ -176,7 +176,8 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
         input_dev->keybit[BIT_WORD(BTN_MOUSE)] |= BIT_MASK(BTN_SIDE) |
                 BIT_MASK(BTN_EXTRA);
         input_dev->relbit[0] |= BIT_MASK(REL_WHEEL);
-
+        // Установка driver_data у input_dev
+        // При этом сам input_dev уже связан с переданным интерфейсом
         input_set_drvdata(input_dev, mouse);
         
         // Функции, вызываемые при подключении и отключении устройства
@@ -218,9 +219,12 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
 
 static void usb_mouse_disconnect(struct usb_interface *intf)
 {
+        // Данная функция получает поле driver_data
+        // В конце функции probe мы уже положили туда структуру mouse
         struct usb_mouse *mouse = usb_get_intfdata (intf);
-
+        // Зануляем информацию об устройстве
         usb_set_intfdata(intf, NULL);
+        // Очищаем выделенные при работе ресурсы
         if (mouse) {
                 usb_kill_urb(mouse->irq);
                 input_unregister_device(mouse->dev);
