@@ -88,8 +88,10 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
 
         if (interface->desc.bNumEndpoints != 1)
                 return -ENODEV;
-
+        
+        // Получаем 0-ую конечную точку, которая гарантировано уже открыта у устройства
         endpoint = &interface->endpoint[0].desc;
+        // Проверяем, что данная точка поддерживает приём прерываний
         if (!usb_endpoint_is_int_in(endpoint))
                 return -ENODEV;
        
@@ -163,7 +165,17 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
 
         input_dev->open = usb_mouse_open;
         input_dev->close = usb_mouse_close;
-
+        
+        /*
+                Инициализация выделенного urb
+                dev - устройство, которому будет отправлен urb
+                pipe - конечная точка (создана ранее)
+                data - буффер для приёма входящих сообщений
+                maxp - размер буфера
+                irq - завершающий обработчик, который вызовется при завершении этого urb
+                mouse - контекст, используется в обработчике
+                interval - интервал, с которым urb должен быть запланирован
+        */
         usb_fill_int_urb(mouse->irq, dev, pipe, mouse->data,
                          (maxp > 8 ? 8 : maxp),
                          usb_mouse_irq, mouse, endpoint->bInterval);
