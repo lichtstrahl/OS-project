@@ -110,29 +110,22 @@ EXPORT_SYMBOL(mouseListenerSendCoordinates);
 
 static int nodeOpen(struct inode* inode, struct file* file)
 {
+    // Увеличиваем счетчик ссылок, чтобы между операцией открытия и чтения файла не произошла выгрузка модуля
     try_module_get(THIS_MODULE);
-    sprintf(mouseInfoMsg, "%d\n%s\n", id, buttonToString());
     return 0;
 }
 
 static ssize_t nodeRead(struct file* file, char* buf, size_t count, loff_t* ppos)
 {
-    if(*ppos >= strlen(mouseInfoMsg))
-    {
-        *ppos = 0;
-        return 0;
-    }
-    if(count > strlen(mouseInfoMsg) - *ppos)
-    {
-        count = strlen(mouseInfoMsg) - *ppos;
-    }
-    copy_to_user((void*) buf, mouseInfoMsg + *ppos, count);
-    *ppos += count;
+    sprintf(mouseInfoMsg, "%d\n%s\n", id, buttonToString());
+    count = strlen(mouseInfoMsg);
+    copy_to_user(buf, mouseInfoMsg, count);
     return count;
 }
 
 static int nodeClose(struct inode* inode, struct file* file)
 {
+    // После завершения работы с файлом уменьшаем количество ссылок
     module_put(THIS_MODULE);
     return 0;
 }
